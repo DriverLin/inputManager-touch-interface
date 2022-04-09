@@ -113,10 +113,10 @@ public class TouchMapper implements EventHandler {
         for (InputEvent event : events) {
             if (event.type == EventCodes.EV_KEY && event.code == EventCodes.BTN_MOUSE) {
                 if (event.value == EventCodes.DOWN) {
-                    viedID = touchController.requireTouch(500, 500);
+                    viedID = touchController.requireTouch(1600, 720);
                     System.out.println("down" + viedID);
-                    view_x = 500;
-                    view_y = 500;
+                    view_x = 1600;
+                    view_y = 720;
                 } else if (event.value == EventCodes.UP) {
                     System.out.println("up");
                     viedID = touchController.releaseTouch(viedID);
@@ -140,7 +140,7 @@ public class TouchMapper implements EventHandler {
     }
 
     public void stop(){
-        touchController.stop();
-        running = false;
+        touchController.stop();//使得主循环停止
+        running = false;//内部线程停止
     }
 }

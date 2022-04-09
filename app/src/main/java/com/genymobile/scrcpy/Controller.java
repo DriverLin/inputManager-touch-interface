@@ -98,7 +98,7 @@ public class Controller {
                 break;
             case ControlMessage.TYPE_INJECT_SCROLL_EVENT:
                 if (device.supportsInputEvents()) {
-                    injectScroll(msg.getPosition(), msg.getHScroll(), msg.getVScroll());
+                    injectScroll(msg.getPosition(), msg.getHScroll(), msg.getVScroll(), msg.getButtons());
                 }
                 break;
             case ControlMessage.TYPE_BACK_OR_SCREEN_ON:
@@ -174,8 +174,6 @@ public class Controller {
     }
 
     private boolean injectTouch(int action, long pointerId, Position position, float pressure, int buttons) {
-//        Ln.i("injectTouch"+action+"\t"+pointerId+"\t"+position+"\t"+pressure+"\t"+buttons);
-
         long now = SystemClock.uptimeMillis();
 
         Point point = device.getPhysicalPoint(position);
@@ -217,25 +215,13 @@ public class Controller {
             buttons = 0;
         }
 
-        MotionEvent event = MotionEvent.obtain(
-                lastTouchDown,
-                now,
-                action,
-                pointerCount,
-                pointerProperties,
-                pointerCoords,
-                0,
-                buttons,
-                1f,
-                1f,
-                DEFAULT_DEVICE_ID,
-                0,
-                source,
-                0);
+        MotionEvent event = MotionEvent
+                .obtain(lastTouchDown, now, action, pointerCount, pointerProperties, pointerCoords, 0, buttons, 1f, 1f, DEFAULT_DEVICE_ID, 0, source,
+                        0);
         return device.injectEvent(event, Device.INJECT_MODE_ASYNC);
     }
 
-    private boolean injectScroll(Position position, int hScroll, int vScroll) {
+    private boolean injectScroll(Position position, int hScroll, int vScroll, int buttons) {
         long now = SystemClock.uptimeMillis();
         Point point = device.getPhysicalPoint(position);
         if (point == null) {
@@ -253,7 +239,7 @@ public class Controller {
         coords.setAxisValue(MotionEvent.AXIS_VSCROLL, vScroll);
 
         MotionEvent event = MotionEvent
-                .obtain(lastTouchDown, now, MotionEvent.ACTION_SCROLL, 1, pointerProperties, pointerCoords, 0, 0, 1f, 1f, DEFAULT_DEVICE_ID, 0,
+                .obtain(lastTouchDown, now, MotionEvent.ACTION_SCROLL, 1, pointerProperties, pointerCoords, 0, buttons, 1f, 1f, DEFAULT_DEVICE_ID, 0,
                         InputDevice.SOURCE_MOUSE, 0);
         return device.injectEvent(event, Device.INJECT_MODE_ASYNC);
     }
