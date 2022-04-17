@@ -318,7 +318,9 @@ public final class Server {
     }
 
     public static void main(String... args) throws Exception {
-        MapperMain.EventUdpListenerInterface(args);
+
+        MapperMain.TouchControllerInterface(args);
+
 //        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 //            @Override
 //            public void uncaughtException(Thread t, Throwable e) {
